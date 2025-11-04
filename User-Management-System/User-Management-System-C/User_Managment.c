@@ -1,8 +1,8 @@
-// [ User Management System ]
+
+// **USER MANAGEMENT SYSTEM** \\.  
+//  password ()enable masking) uses
 #include<stdio.h>
 #include<string.h>
-#include<unistd.h>
-#include<conio.h>
 
 #define MAX_USERS 10
 #define CREDNETIAL_LENGTH 30
@@ -17,7 +17,7 @@ typedef struct {
 void register_user();
 int login_user();
 void fix_fget_input(char*);
-void input_credentials(char* username, char* password);
+void input_password(char*);
 
 int main(){
     int option;
@@ -66,7 +66,10 @@ void register_user(){
     }
     int new_index = user_count;
     printf("\nRegistration a new user");
-    input_credentials(users[new_index].username, users[new_index].password);
+    printf("\nEnter username: ");
+    fgets(users[new_index].username, CREDNETIAL_LENGTH, stdin);
+    fix_fget_input(users[new_index].username);
+    input_password(users[new_index].password);
 
     user_count++;
     printf("\nResgitration Successful!");
@@ -76,7 +79,10 @@ int login_user(){
     char username[CREDNETIAL_LENGTH];
     char password[CREDNETIAL_LENGTH];
 
-    input_credentials(username, password);
+    printf("\nEnter username: ");
+    fgets(username, CREDNETIAL_LENGTH, stdin);
+    fix_fget_input(username);
+    input_password(password);
 
     for(int i=0; i < user_count; i++){
         if(strcmp(username, users[i].username) == 0 &&
@@ -87,32 +93,14 @@ int login_user(){
     return -1;
 }
 
-void input_credentials(char* username, char* password){
-    printf("\nEnter username: ");
-    fgets(username, CREDNETIAL_LENGTH, stdin);
-    fix_fget_input(username);
-    printf("Enter password (masking enabled): ");
-
-
-// change terminal properties
-       int i = 0;
-    char ch;
-
-    // password masking using _getch()
-    while ((ch = _getch()) != '\r' && i < CREDNETIAL_LENGTH - 1) { // '\r' = Enter key
-        if (ch == '\b' && i > 0) { // handle backspace
-            printf("\b \b");
-            i--;
-        } else if (ch != '\b') {
-            password[i++] = ch;
-            printf("*");
-        }
-    }
-    password[i] = '\0';
-    printf("\n");
+void input_password(char* password){
+    printf("Enter password: ");
+    fgets(password, CREDNETIAL_LENGTH, stdin);
+    fix_fget_input(password);
 }
 
 void fix_fget_input(char* string){
 int index =  strcspn(string, "\n");
 string[index] = '\0';
 }
+
